@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-TaskitApplication<taskit>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.taskit.taskit.TaskitApplication",
+      "projectName": "taskit",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

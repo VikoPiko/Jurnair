@@ -1,0 +1,92 @@
+# === GENERAL OUTPUT ===
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.nyc_output/
+**/.temp/
+**/.tmp/
+
+# === FRONTEND (Next.js / Yarn / PNPM) ===
+
+frontend-v1
+frontend-v2
+
+**/.next/
+**/out/
+**/.vercel/
+**/.pnp/
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches
+!**/.yarn/plugins
+!**/.yarn/releases
+!**/.yarn/versions
+
+**/*.tsbuildinfo
+**/next-env.d.ts
+**/*.pem
+
+# === LOG FILES ===
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# === OS FILES ===
+.DS_Store
+
+# === IDE/EDITOR FILES ===
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.idea/
+*.iml
+*.ipr
+*.iws
+*.launch
+*.sublime-workspace
+.project
+.classpath
+.settings/
+.c9/
+.sts4-cache
+
+# === JAVA SPECIFIC ===
+**/target/
+.mvn/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# === MAVEN WRAPPER ===
+.mvn/wrapper/maven-wrapper.jar
+
+# === SPRING / STS ===
+.apt_generated
+.factorypath
+.springBeans
+
+# === NETBEANS ===
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# === ENVIRONMENT FILES ===
+.env
+.env.local
+.env.*.local
+
+# === RUNTIME DATA ===
+*.pid
+*.pid.lock
+*.seed
+
+# === NODE DIAGNOSTIC REPORTS ===
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

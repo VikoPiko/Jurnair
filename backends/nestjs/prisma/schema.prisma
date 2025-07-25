@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String     @id @default(uuid())
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  email            String     @unique
+  password         String
+  firstName        String?
+  lastName         String?
+  phoneNumber      String?
+  dateOfBirth      DateTime?
+  bookings         Booking[]
+  bio              String?
+  avatarUrl        String?
+  role             Roles      @default(USER)
+  posts            Post[]
+  sentMessages     Message[]  @relation("SentMessages")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  Property         Property[]
+}
+
+enum Roles {
+  USER
+  HOST
+  ADMIN
+}
+
+model Booking {
+  id             String   @id @default(uuid())
+  checkInDate    DateTime
+  checkOutDate   DateTime
+  durationNights Int
+  totalPrice     Float
+  pricePerNight  Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  propertyId String
+  property   Property  @relation(fields: [propertyId], references: [id])
+  roomTypeId String?
+  roomType   RoomType? @relation(fields: [roomTypeId], references: [id])
+}
+
+model Property {
+  id            String          @id @default(uuid())
+  title         String
+  description   String
+  location      String // could be broken down to city/country/lat/lng later
+  address       String?
+  pricePerNight Float
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  hostId        String
+  host          User            @relation(fields: [hostId], references: [id])
+  bookings      Booking[]
+  roomTypes     RoomType[]
+  posts         Post[]
+  images        PropertyImage[]
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  caption    String?
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+}
+
+model RoomType {
+  id            String    @id @default(uuid())
+  name          String
+  description   String?
+  pricePerNight Float
+  totalRooms    Int
+  propertyId    String
+  property      Property  @relation(fields: [propertyId], references: [id])
+  Booking       Booking[]
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  sentAt     DateTime @default(now())
+  senderId   String
+  receiverId String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model Post {
+  id         String    @id @default(uuid())
+  title      String
+  content    String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  authorId   String
+  author     User      @relation(fields: [authorId], references: [id])
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id])
+}
