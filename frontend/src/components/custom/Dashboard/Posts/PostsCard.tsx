@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { ListingType, PostsType } from "../Listings/ListingCard";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { Bookmark, Heart, MessageSquare, Send, Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, PostsType } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,

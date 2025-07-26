@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { ListingType, PostsType } from "../Listings/ListingCard";
 import { PostCard } from "./PostsCard";
+import { PostsType } from "@/lib/utils";
 
 interface PostsProps {
   posts: PostsType[];
@@ -9,7 +9,7 @@ interface PostsProps {
 
 const PostsBox = ({ posts }: PostsProps) => {
   return (
-    <div className="flex flex-1 flex-col max-w-[40vw] gap-10">
+    <div className="flex flex-1 flex-col max-w-[35vw] gap-10">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}

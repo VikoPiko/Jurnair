@@ -7,39 +7,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
+import { cn, ListingType } from "@/lib/utils";
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-
-export interface ListingType {
-  id: string;
-  title: string;
-  property: string;
-  authorId: string;
-  images: string[];
-  pricePerNight: number;
-  description?: string;
-  rating?: number;
-  location?: string;
-  likes?: number;
-}
-
-export interface PostsType {
-  id: string;
-  title: string;
-  property: string;
-  authorId: string;
-  images: string[];
-  totalPrice: number;
-  description?: string;
-  rating?: number;
-  location?: string;
-  likes: number;
-}
 
 const ListingCard = ({
   title,
+  id,
   property,
   authorId,
   images,
@@ -50,15 +26,20 @@ const ListingCard = ({
 }: ListingType) => {
   const [expanded, setExpanded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const MAX_LENGTH = 100;
+  const MAX_LENGTH = 90;
   const safeDescription = description ?? "";
   const isLong = safeDescription.length > MAX_LENGTH;
   const previewText = isLong
     ? safeDescription.slice(0, MAX_LENGTH) + "..."
     : safeDescription;
 
+  const router = useRouter();
+
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border bg-background transition-all hover:shadow-md">
+    <div
+      className="group relative flex flex-col overflow-hidden rounded-3xl border bg-background transition-all shadow-md hover:shadow-lg hover:cursor-pointer"
+      onClick={() => router.push(`/listing/${id}`)}
+    >
       <div className="relative aspect-square overflow-hidden">
         <Carousel className="w-full">
           <CarouselContent>
@@ -71,7 +52,7 @@ const ListingCard = ({
                       src={"/boston1.jpg"}
                       alt={`${title} - image ${idx + 1}`}
                       fill
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-transform"
                     />
                   </div>
                 </CarouselItem>
@@ -129,8 +110,8 @@ const ListingCard = ({
             )}
           </div>
         )}
-        <div className="mt-auto p-4">
-          <p className="font-medium">
+        <div className="mt-auto p-2 -mb-2">
+          <p className="font-medium flex items-center gap-x-1">
             <span className="text-lg">${pricePerNight}</span>
             <span className="text-sm text-muted-foreground"> night</span>
           </p>

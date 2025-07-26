@@ -13,7 +13,12 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-export function SearchBar() {
+interface SearchBarProps {
+  onLocationChange: (location: string) => void;
+  onClear: () => void;
+}
+
+export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"location" | "dates" | "guests">(
     "location"
@@ -47,19 +52,26 @@ export function SearchBar() {
     });
     setDateRange({ from: undefined, to: undefined });
     setIsOpen(false);
+    onClear();
   };
 
-  const popularDests = [
+  const [popularDests, setPopularDests] = useState<string[]>([
     "New York",
     "London",
     "Paris",
     "Tokyo",
     "Sydney",
     "Rome",
-  ];
+  ]);
+
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const filteredListings = popularDests.filter((item) =>
     item.toLowerCase().includes(location.toLowerCase())
+  );
+
+  const filteredPopular = popularDests.filter(
+    (city) => !recentSearches.includes(city)
   );
 
   return (
@@ -72,7 +84,7 @@ export function SearchBar() {
               setActiveTab("location");
               setIsOpen(true);
             } else {
-              setIsOpen(false); // closes when clicking outside
+              setIsOpen(false);
             }
           }}
         >
@@ -98,28 +110,57 @@ export function SearchBar() {
                 <Input
                   placeholder="Search destinations"
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                    onLocationChange(e.target.value);
+                  }}
+                  onSubmit={() => {
+                    if (location.trim() !== "") {
+                      setRecentSearches((prev) => {
+                        const updated = [
+                          location,
+                          ...prev.filter((item) => item !== location),
+                        ];
+                        return updated.slice(0, 5);
+                      });
+                    }
+                  }}
                   maxLength={35}
                   className="h-9"
                 />
               </div>
+              {recentSearches.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <h4 className="text-sm font-medium">Recent searches</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {recentSearches.map((city) => (
+                      <Button
+                        key={city}
+                        variant="outline"
+                        className="justify-start bg-transparent"
+                        onClick={() => {
+                          setLocation(city);
+                          onLocationChange(city);
+                        }}
+                      >
+                        {city}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="mt-4 space-y-2">
                 <h4 className="text-sm font-medium">Popular destinations</h4>
                 <div className="grid grid-cols-2 gap-2">
-                  {/* [
-                    "New York",
-                    "London",
-                    "Paris",
-                    "Tokyo",
-                    "Sydney",
-                    "Rome",
-                  ] */}
-                  {filteredListings.map((city) => (
+                  {filteredPopular.map((city) => (
                     <Button
                       key={city}
                       variant="outline"
                       className="justify-start bg-transparent"
-                      onClick={() => setLocation(city)}
+                      onClick={() => {
+                        setLocation(city);
+                        onLocationChange(city);
+                      }}
                     >
                       {city}
                     </Button>
@@ -139,7 +180,7 @@ export function SearchBar() {
               setActiveTab("dates");
               setIsOpen(true);
             } else {
-              setIsOpen(false); // closes when clicking outside
+              setIsOpen(false);
             }
           }}
         >
@@ -186,7 +227,7 @@ export function SearchBar() {
               setActiveTab("guests");
               setIsOpen(true);
             } else {
-              setIsOpen(false); // closes when clicking outside
+              setIsOpen(false);
             }
           }}
         >
@@ -286,7 +327,18 @@ export function SearchBar() {
         <Button
           size="icon"
           className="ml-2 h-10 w-10 shrink-0 rounded-full"
-          onClick={() => setIsOpen(false)}
+          onClick={() => {
+            if (location.trim() !== "") {
+              setRecentSearches((prev) => {
+                const updated = [
+                  location,
+                  ...prev.filter((item) => item !== location),
+                ];
+                return updated.slice(0, 5);
+              });
+            }
+            setIsOpen(false);
+          }}
         >
           <Search className="h-4 w-4" />
           <span className="sr-only">Search</span>
@@ -295,7 +347,18 @@ export function SearchBar() {
           variant={"outline"}
           //   className="ml-3 h-8 w-15 shrink-0 rounded-full"
           className="ml-3 shrink-0 rounded-full"
-          onClick={() => resetAll()}
+          onClick={() => {
+            setLocation("");
+            setActiveTab("location");
+            setGuests({
+              adults: 1,
+              children: 0,
+              infants: 0,
+              pets: 0,
+            });
+            setDateRange({ from: undefined, to: undefined });
+            setIsOpen(false);
+          }}
         >
           <h1 className="font-semibold">Clear</h1>
         </Button>

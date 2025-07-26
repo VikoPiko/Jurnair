@@ -10,15 +10,21 @@ import {
 import { CircleQuestionMarkIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
-const TopNav = () => {
+const TopNav = ({
+  onSearch,
+  onClear,
+}: {
+  onSearch: (query: string) => void;
+  onClear: () => void;
+}) => {
   return (
     <div className="pb-10">
       <div className="flex justify-between items-center p-5">
         <div className="inline-flex gap-x-2 items-center">
-          <h1 className="text-3xl font-bold">Jurnair</h1>
+          <h1 className="text-3xl font-bold select-none">Jurnair</h1>
           <Image src={"/icon.svg"} width={35} height={35} alt={""} />
         </div>
-        <SearchBar />
+        <SearchBar onLocationChange={onSearch} onClear={onClear} />
         <div className="flex items-center gap-x-4">
           <Button
             variant="outline"
