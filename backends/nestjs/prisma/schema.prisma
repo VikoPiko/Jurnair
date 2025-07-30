@@ -67,6 +67,8 @@ model Property {
   roomTypes     RoomType[]
   posts         Post[]
   images        PropertyImage[]
+  isDeleted     Boolean         @default(false)
+  Listing       Listing[]
 }
 
 model PropertyImage {
@@ -85,7 +87,7 @@ model RoomType {
   totalRooms    Int
   propertyId    String
   property      Property  @relation(fields: [propertyId], references: [id])
-  Booking       Booking[]
+  bookings      Booking[]
 }
 
 model Message {
@@ -105,7 +107,33 @@ model Post {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   authorId   String
+  isDeleted  Boolean   @default(false)
   author     User      @relation(fields: [authorId], references: [id])
   propertyId String?
   property   Property? @relation(fields: [propertyId], references: [id])
+}
+
+model Listing {
+  id              String    @id @default(uuid())
+  title           String
+  property_id     String?
+  property        Property? @relation(fields: [property_id], references: [id])
+  author_Id       String
+  images          String[]
+  price_per_night Float
+  description     String
+  location        String
+  rating          Float
+  review_count    Int
+  bedrooms        Int
+  bathrooms       Int
+  guests          Int
+  amenities       String[]
+  lat             Float
+  lng             Float
+  check_in        DateTime
+  check_out       DateTime
+  house_rules     String[]
+  is_deleted      Boolean   @default(false)
+  is_favorite     Boolean   @default(false)
 }

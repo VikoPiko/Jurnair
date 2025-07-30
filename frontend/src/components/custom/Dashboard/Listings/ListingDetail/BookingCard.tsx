@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Users, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,18 +31,18 @@ export function BookingCard({
   const [nights, setNights] = useState(0);
 
   // Calculate nights when dates change
-  const calculateNights = () => {
+  useEffect(() => {
     if (checkIn && checkOut) {
       const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setNights(diffDays);
-      return diffDays;
+    } else {
+      setNights(0);
     }
-    return 0;
-  };
+  }, [checkIn, checkOut]);
 
-  const totalNights = calculateNights();
-  const subtotal = totalNights * pricePerNight;
+  //   const totalNights = calculateNights();
+  const subtotal = nights * pricePerNight;
   const serviceFee = Math.round(subtotal * 0.14);
   const total = subtotal + serviceFee;
 
@@ -174,13 +174,13 @@ export function BookingCard({
           You won't be charged yet
         </p>
 
-        {totalNights > 0 && (
+        {nights > 0 && (
           <>
             <Separator />
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>
-                  ${pricePerNight} x {totalNights} nights
+                  ${pricePerNight} x {nights} nights
                 </span>
                 <span>${subtotal}</span>
               </div>

@@ -66,10 +66,10 @@ export function PostCard({ post }: { post: PostsType }) {
       {/* Post Header */}
       <div className="flex items-center gap-3 p-4 pb-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-orange-500 text-white font-medium">
-          {post.authorId.charAt(0)}
+          {post.author_Id.charAt(0)}
         </div>
         <div className="flex-1">
-          <p className="font-medium text-sm">{post.authorId}</p>
+          <p className="font-medium text-sm">{post.author_Id}</p>
           <p className="text-xs text-muted-foreground">{post.location}</p>
         </div>
         <DropdownMenu>
@@ -126,7 +126,7 @@ export function PostCard({ post }: { post: PostsType }) {
       </div>
       <h3 className="font-medium mb-2 ml-2">{post.title}</h3>
       {/* Post Image */}
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden p-2">
         <Carousel className="w-full">
           <CarouselContent>
             {post.images.map((image, index) => (
@@ -136,7 +136,7 @@ export function PostCard({ post }: { post: PostsType }) {
                     src={image || "/placeholder.svg"}
                     alt={`${post.title} - image ${index + 1}`}
                     fill
-                    className="object-cover"
+                    className="object-cover rounded-lg"
                   />
                 </div>
               </CarouselItem>
@@ -220,7 +220,7 @@ export function PostCard({ post }: { post: PostsType }) {
           {comments &&
             comments.map((comment, idx) => (
               <p key={idx} className="text-sm">
-                <span className="font-semibold">{post.authorId} </span>
+                <span className="font-semibold">{post.author_Id} </span>
                 {comment}
               </p>
             ))}

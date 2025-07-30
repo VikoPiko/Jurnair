@@ -7,27 +7,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn, ListingType } from "@/lib/utils";
+import { like } from "@/lib/actions/serverActions";
+import { cn, ListingDetailProps, ListingType } from "@/lib/utils";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const ListingCard = ({
-  title,
-  id,
-  property,
-  authorId,
-  images,
-  pricePerNight,
-  description,
-  rating,
-  location,
-}: ListingType) => {
+const ListingCard = ({ listing }: ListingDetailProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(listing.is_favorite);
   const MAX_LENGTH = 90;
-  const safeDescription = description ?? "";
+  const safeDescription = listing.description ?? "";
   const isLong = safeDescription.length > MAX_LENGTH;
   const previewText = isLong
     ? safeDescription.slice(0, MAX_LENGTH) + "..."
@@ -35,22 +26,27 @@ const ListingCard = ({
 
   const router = useRouter();
 
+  const handleLike = async (listingId: string) => {
+    setIsFavorite(!isFavorite);
+    like(listingId);
+  };
+
   return (
     <div
       className="group relative flex flex-col overflow-hidden rounded-3xl border bg-background transition-all shadow-md hover:shadow-lg hover:cursor-pointer"
-      onClick={() => router.push(`/listing/${id}`)}
+      onClick={() => router.push(`/listing/${listing.id}`)}
     >
       <div className="relative aspect-square overflow-hidden">
         <Carousel className="w-full">
           <CarouselContent>
-            {images && images.length > 0 ? (
-              images.map((img, idx) => (
+            {listing.images && listing.images.length > 0 ? (
+              listing.images.map((img, idx) => (
                 <CarouselItem key={idx}>
                   <div className="relative aspect-square overflow-hidden">
                     <Image
                       //   src={img || "/boston1.jpg"}
                       src={"/boston1.jpg"}
-                      alt={`${title} - image ${idx + 1}`}
+                      alt={`${listing.title} - image ${idx + 1}`}
                       fill
                       className="object-cover transition-transform"
                     />
@@ -80,7 +76,10 @@ const ListingCard = ({
             "absolute right-2 top-2 z-10 rounded-full bg-background/80 backdrop-blur-sm transition-all hover:bg-background",
             isFavorite ? "text-rose-500" : "text-muted-foreground"
           )}
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={(e) => {
+            handleLike(listing.id);
+            e.stopPropagation();
+          }}
         >
           <Heart className={cn("h-5 w-5", isFavorite && "fill-rose-500")} />
           <span className="sr-only">Add to favorites</span>
@@ -88,16 +87,16 @@ const ListingCard = ({
       </div>
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-2 flex items-start justify-between">
-          <h3 className="font-medium line-clamp-1">{title}</h3>
+          <h3 className="font-medium line-clamp-1">{listing.title}</h3>
           <div className="flex items-center gap-1 text-sm">
             <span>★</span>
-            <span>{rating}</span>
+            <span>{listing.rating}</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">{location}</p>
-        <p className="text-sm text-muted-foreground">{property}</p>
+        <p className="text-sm text-muted-foreground">{listing.location}</p>
+        <p className="text-sm text-muted-foreground">{listing.property}</p>
 
-        {description && (
+        {listing.description && (
           <div className="mt-2 text-sm text-muted-foreground">
             <p>{expanded || !isLong ? safeDescription : previewText}</p>
             {isLong && (
@@ -112,9 +111,10 @@ const ListingCard = ({
         )}
         <div className="mt-auto p-2 -mb-2">
           <p className="font-medium flex items-center gap-x-1">
-            <span className="text-lg">${pricePerNight}</span>
+            <span className="text-lg">${listing.price_per_night}</span>
             <span className="text-sm text-muted-foreground"> night</span>
           </p>
+          <p>Is fav: {listing.is_favorite}</p>
         </div>
       </div>
     </div>

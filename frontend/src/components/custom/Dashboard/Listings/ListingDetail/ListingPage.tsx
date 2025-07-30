@@ -26,6 +26,15 @@ import { BookingCard } from "./BookingCard";
 import { ReviewsSection } from "./ReviewsSection";
 import { LocationMap } from "./LocationMap";
 import { cn, ListingDetailProps } from "@/lib/utils";
+import { like } from "@/lib/actions/serverActions";
+import { MapComponent } from "@/components/custom/Map/map";
+import { format } from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const amenityIcons: Record<string, any> = {
   WiFi: Wifi,
@@ -39,7 +48,12 @@ const amenityIcons: Record<string, any> = {
 
 const ListingPage = ({ listing }: ListingDetailProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(listing.is_favorite);
+
+  const handleLike = async (listingId: string) => {
+    setIsFavorite(!isFavorite);
+    like(listingId);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,10 +76,10 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
               variant="ghost"
               size="sm"
               className={cn("gap-2", isFavorite && "text-red-500")}
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={() => handleLike(listing.id)}
             >
               <Heart className={cn("h-4 w-4", isFavorite && "fill-current")} />
-              Save
+              {isFavorite ? <span>Saved</span> : <span>Save</span>}
             </Button>
           </div>
         </div>
@@ -74,12 +88,12 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
       <main className="container mx-auto px-4 py-8">
         {/* Title Section */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">{listing.title}</h1>
+          <h1 className="text-3xl font-bold mb-2">{listing?.title}</h1>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               <span className="font-medium">{listing.rating}</span>
-              <span>({listing.reviewCount} reviews)</span>
+              <span>({listing.review_count} reviews)</span>
             </div>
             <div className="flex items-center gap-1">
               <MapPin className="h-4 w-4" />
@@ -149,7 +163,7 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
                       src={listing.authorAvatar || "/placeholder.svg"}
                     />
                     <AvatarFallback>
-                      {listing.authorId.slice(0, 2)}
+                      {listing.author_Id.slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -187,17 +201,24 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
             {/* Reviews */}
             <ReviewsSection
               rating={listing.rating}
-              reviewCount={listing.reviewCount}
+              reviewCount={listing.review_count}
             />
 
             {/* Location */}
             <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Where you'll be</h3>
-                <div className="mb-4">
+              <CardContent className="p-3">
+                <h3 className="text-lg font-semibold mb-1">Where you'll be</h3>
+                <div className="mb-2">
                   <p className="text-muted-foreground">{listing.location}</p>
                 </div>
-                <LocationMap coordinates={listing.coordinates} />
+                {/* <LocationMap
+                  coordinates={{ lat: listing.lat, lng: listing.lng }}
+                /> */}
+                <div className="w-full h-[350px]">
+                  <MapComponent
+                    coordinates={{ lat: listing.lat, lng: listing.lng }}
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -208,16 +229,36 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Check-in:</span>
-                    <span>{listing.checkIn}</span>
+                    <span>
+                      {/* {new Date(listing.check_in).toLocaleDateString()} */}
+                      <span>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger>
+                            {format(new Date(listing.check_in), "dd/MM/yyyy")}
+                          </TooltipTrigger>
+                          <TooltipContent>Format is: DD/MM/YYYY</TooltipContent>
+                        </Tooltip>
+                      </span>
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Check-out:</span>
-                    <span>{listing.checkOut}</span>
+                    <span>
+                      {/* {new Date(listing.check_out).toLocaleDateString()} */}
+                      <span>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger>
+                            {format(new Date(listing.check_out), "dd/MM/yyyy")}
+                          </TooltipTrigger>
+                          <TooltipContent>Format is: DD/MM/YYYY</TooltipContent>
+                        </Tooltip>
+                      </span>
+                    </span>
                   </div>
                   <Separator className="my-3" />
                   <ul className="space-y-1 text-sm text-muted-foreground">
-                    {listing.houseRules &&
-                      listing.houseRules.map((rule, index) => (
+                    {listing.house_rules &&
+                      listing.house_rules.map((rule, index) => (
                         <li key={index}>• {rule}</li>
                       ))}
                   </ul>
@@ -230,9 +271,9 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <BookingCard
-                pricePerNight={listing.pricePerNight}
+                pricePerNight={listing.price_per_night}
                 rating={listing.rating}
-                reviewCount={listing.reviewCount}
+                reviewCount={listing.review_count}
               />
             </div>
           </div>

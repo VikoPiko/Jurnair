@@ -1,15 +1,15 @@
 import ListingCard from "@/components/custom/Dashboard/Listings/ListingCard";
 import ListingPage from "@/components/custom/Dashboard/Listings/ListingDetail/ListingPage";
 import { ListingsGrid } from "@/components/custom/Dashboard/Listings/ListingsGrid";
-import { SAMPLE_LISTINGS } from "@/lib/utils";
+import { getListings } from "@/lib/actions/serverActions";
 import React from "react";
 
 const page = async ({ params }: { params: Promise<{ listingId: string }> }) => {
   const listingId = (await params).listingId;
-  const listings = SAMPLE_LISTINGS;
+  const listings = await getListings();
 
   const filteredListing = listings.filter(
-    (listing) => listing.id === listingId
+    (listing: any) => listing.id === listingId
   );
 
   return (

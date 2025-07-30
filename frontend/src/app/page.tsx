@@ -1,19 +1,23 @@
-"use client";
+// "use client";
 import Dashboard from "@/components/custom/Dashboard/Dashboard";
+import PageContent from "@/components/custom/PageContent";
 import Sidebar from "@/components/custom/Sidebar/Sidebar";
+import { getListings } from "@/lib/actions/serverActions";
 
 import React, { useState } from "react";
 
-const page = () => {
-  const [activeView, setActiveView] = useState<"listings" | "posts">(
-    "listings"
-  );
-  return (
-    <div className="grid gap-4 p-4 grid-cols-[200px_1fr]">
-      <Sidebar />
+const page = async () => {
+  const rawListings = await getListings();
+  const listings = rawListings.map((l: any) => ({ listing: l }));
 
-      <Dashboard onViewChange={setActiveView} />
-    </div>
+  return (
+    // <div className="grid gap-4 p-4 grid-cols-[200px_1fr]">
+    //   <Sidebar />
+
+    //   {/* <Dashboard onViewChange={setActiveView} /> */}
+    //   <Dashboard listings={listings} />
+    // </div>
+    <PageContent listings={listings} />
   );
 };
 
