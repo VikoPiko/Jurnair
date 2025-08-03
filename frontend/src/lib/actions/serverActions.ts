@@ -23,3 +23,11 @@ export const like = async (listingId: string) => {
   const updatedListing = await res.json();
   return updatedListing;
 };
+
+export const getGoHello = async () => {
+  const res = await fetch("http://localhost:8080/hello");
+  if (!res.ok) throw new Error("Failed to get GO request");
+
+  const response = await res.json();
+  return response.message;
+};

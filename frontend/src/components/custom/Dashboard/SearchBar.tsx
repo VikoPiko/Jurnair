@@ -97,7 +97,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
               <MapPin className="h-4 w-4 text-muted-foreground" />
               <div className="flex flex-col items-start">
                 <span className="text-xs font-medium">Where</span>
-                <span className="text-sm truncate max-w-[160px]">
+                <span className="text-sm truncate dark:text-gray-200 max-w-[160px]">
                   {location || "Search destinations"}
                 </span>
               </div>
@@ -193,7 +193,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
               <Calendar className="h-4 w-4 text-muted-foreground" />
               <div className="flex flex-col items-start">
                 <span className="text-xs font-medium">When</span>
-                <span className="text-sm">
+                <span className="text-sm dark:text-gray-200">
                   {dateRange.from
                     ? dateRange.to
                       ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
@@ -240,7 +240,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
               <Users className="h-4 w-4 text-muted-foreground" />
               <div className="flex flex-col items-start">
                 <span className="text-xs font-medium">Who</span>
-                <span className="text-sm">
+                <span className="text-sm dark:text-gray-200">
                   {guests.adults + guests.children > 0
                     ? `${guests.adults + guests.children} guest${
                         guests.adults + guests.children !== 1 ? "s" : ""
@@ -360,7 +360,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
             setIsOpen(false);
           }}
         >
-          <h1 className="font-semibold">Clear</h1>
+          <h1>Clear</h1>
         </Button>
       </div>
     </div>

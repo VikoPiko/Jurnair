@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/popover";
 import { CircleQuestionMarkIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { ModeToggle } from "../mode-toggle";
+import { Icon } from "../Icon";
 
 const TopNav = ({
   onSearch,
@@ -20,12 +22,14 @@ const TopNav = ({
   return (
     <div className="pb-10">
       <div className="flex justify-between items-center p-5">
-        <div className="inline-flex gap-x-2 items-center">
+        <div className="inline-flex gap-x-2 items-center dark:text-white">
           <h1 className="text-3xl font-bold select-none">Jurnair</h1>
-          <Image src={"/icon.svg"} width={35} height={35} alt={""} />
+          {/* <Image src={"/icon.svg"} width={35} height={35} alt={""} /> */}
+          <Icon />
         </div>
         <SearchBar onLocationChange={onSearch} onClear={onClear} />
         <div className="flex items-center gap-x-4">
+          <ModeToggle />
           <Button
             variant="outline"
             className="hover:bg-stone-200 transition-all duration-300"

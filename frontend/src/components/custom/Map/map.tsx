@@ -17,7 +17,7 @@ const MapComponent = ({
 }) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY!,
-    id: "google-map-script", // optional but helps avoid duplicates
+    id: "google-map-script",
   });
 
   if (!isLoaded) return <p>Loading map...</p>;
@@ -32,7 +32,7 @@ const MapComponent = ({
           zoomControl: true,
           tilt: 0,
           gestureHandling: "auto",
-          mapTypeId: "satellite",
+          mapTypeId: "roadmap",
         }}
       >
         <Marker position={coordinates} />

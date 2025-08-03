@@ -1,31 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import TopNav from "./TopNav";
-import {
-  cn,
-  ListingDetailProps,
-  SAMPLE_LISTINGS,
-  // SAMPLE_LISTINGS,
-  SAMPLE_POSTS,
-} from "@/lib/utils";
+import { ListingDetailProps, SAMPLE_POSTS } from "@/lib/utils";
 import { ViewToggle } from "./ViewToggle";
 import { ListingsGrid } from "./Listings/ListingsGrid";
 import PostsBox from "./Posts/PostsBox";
-import { getListings } from "@/lib/actions/serverActions";
+import Journal from "./Journal/Journal";
 
 type DashboardTest = {
   listings: ListingDetailProps[];
   selectedTab: string;
 };
 
-type ListingDetailsType = {
-  listings: ListingDetailProps[];
-};
 const Dashboard = ({ listings, selectedTab }: DashboardTest) => {
   const [activeView, setActiveView] = useState<"listings" | "posts">(
     "listings"
   );
-
   const [searchQuery, setSearchQuery] = useState("");
   const posts = SAMPLE_POSTS;
 
@@ -34,7 +24,7 @@ const Dashboard = ({ listings, selectedTab }: DashboardTest) => {
   );
 
   return (
-    <div className="bg-white rounded-lg p-3 shadow-lg">
+    <div className="bg-white dark:bg-[#242424] rounded-lg p-3 shadow-lg">
       <TopNav onSearch={setSearchQuery} onClear={() => setSearchQuery("")} />
 
       <div>
@@ -52,8 +42,13 @@ const Dashboard = ({ listings, selectedTab }: DashboardTest) => {
             </div>
           </div>
         )}
-        {selectedTab === "Favorites" && <div>Favorites</div>}
+        {selectedTab === "My Journal" && (
+          <div className="flex items-center justify-center mb-2 h-[75vh]">
+            <Journal />
+          </div>
+        )}
         {selectedTab === "Settings" && <div>Settings</div>}
+        {selectedTab === "History" && <div>History</div>}
       </div>
     </div>
   );

@@ -206,7 +206,7 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
 
             {/* Location */}
             <Card>
-              <CardContent className="p-3">
+              <CardContent className="px-4">
                 <h3 className="text-lg font-semibold mb-1">Where you'll be</h3>
                 <div className="mb-2">
                   <p className="text-muted-foreground">{listing.location}</p>
@@ -214,7 +214,7 @@ const ListingPage = ({ listing }: ListingDetailProps) => {
                 {/* <LocationMap
                   coordinates={{ lat: listing.lat, lng: listing.lng }}
                 /> */}
-                <div className="w-full h-[350px]">
+                <div className="w-full h-[400px] shadow-lg">
                   <MapComponent
                     coordinates={{ lat: listing.lat, lng: listing.lng }}
                   />

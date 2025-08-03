@@ -33,10 +33,10 @@ const ListingCard = ({ listing }: ListingDetailProps) => {
 
   return (
     <div
-      className="group relative flex flex-col overflow-hidden rounded-3xl border bg-background transition-all shadow-md hover:shadow-lg hover:cursor-pointer"
+      className="group relative flex flex-col overflow-hidden rounded-3xl border bg-background transition-all shadow-md hover:shadow-lg hover:cursor-pointer dark:border-gray-500 dark:shadow-gray-600 dark:shadow-sm"
       onClick={() => router.push(`/listing/${listing.id}`)}
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden ">
         <Carousel className="w-full">
           <CarouselContent>
             {listing.images && listing.images.length > 0 ? (
@@ -114,7 +114,7 @@ const ListingCard = ({ listing }: ListingDetailProps) => {
             <span className="text-lg">${listing.price_per_night}</span>
             <span className="text-sm text-muted-foreground"> night</span>
           </p>
-          <p>Is fav: {listing.is_favorite}</p>
+          <p>{isFavorite === true ? "Favotired" : ""}</p>
         </div>
       </div>
     </div>
