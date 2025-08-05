@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface User {
   id: string;
@@ -11,7 +17,7 @@ interface User {
   dateOfBirth?: string;
   bio?: string;
   avatarUrl?: string;
-  role: "USER" | "ADMIN" | "MODERATOR";
+  role: "USER" | "ADMIN" | "HOST";
 }
 interface AuthContextType {
   user: User | null;
@@ -32,6 +38,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Failed to parse stored user:", error);
+        sessionStorage.removeItem("user"); // Clear bad data
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -43,9 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         lastName: "Piko",
         email: email,
         avatarUrl: "",
-        role: "USER",
+        role: "HOST",
       };
       setUser(mockData);
+      sessionStorage.setItem("user", JSON.stringify(mockData));
     } catch (error) {
       throw new Error("Sign in failed...");
     } finally {
@@ -88,6 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setUser(null);
+    sessionStorage.removeItem("user");
   };
 
   return (

@@ -2,7 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Home, Settings, Search, Book, FileClock, Cog } from "lucide-react";
+import {
+  Home,
+  Settings,
+  Search,
+  Book,
+  FileClock,
+  Cog,
+  Wrench,
+} from "lucide-react";
 
 enum Tabs {
   Home = "Home",

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AuthDialog } from "./auth-dialog";
 import { useAuth } from "./auth-context";
+import { useAuthDialog } from "./auth-dialog-context";
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -20,14 +21,19 @@ export function AuthGuard({
   description = "You must be logged in to access this content",
   className = "",
 }: AuthGuardProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const { openDialog } = useAuthDialog();
 
-  const openAuthDialog = (mode: "signin" | "signup") => {
-    setAuthMode(mode);
-    setAuthDialogOpen(true);
-  };
+  // const openAuthDialog = (mode: "signin" | "signup") => {
+  //   setAuthMode(mode);
+  //   setAuthDialogOpen(true);
+  // };
+
+  if (isLoading) {
+    return <div className="text-center py-20">Loading...</div>;
+  }
 
   if (isAuthenticated) {
     return <>{children}</>;
@@ -48,23 +54,24 @@ export function AuthGuard({
           </div>
 
           <div className="space-y-3">
-            <Button className="w-full" onClick={() => openAuthDialog("signin")}>
+            {/* <Button className="w-full" onClick={() => openAuthDialog("signin")}> */}
+            <Button className="w-full" onClick={() => openDialog("signin")}>
               Sign In
             </Button>
             <Button
               variant="outline"
               className="w-full bg-transparent"
-              onClick={() => openAuthDialog("signup")}
+              onClick={() => openDialog("signup")}
             >
               Sign Up
             </Button>
           </div>
 
-          <AuthDialog
+          {/* <AuthDialog
             open={authDialogOpen}
             onOpenChange={setAuthDialogOpen}
             defaultMode={authMode}
-          />
+          /> */}
         </CardContent>
       </Card>
     </div>

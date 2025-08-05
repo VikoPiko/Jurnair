@@ -19,21 +19,26 @@ const Dashboard = ({ listings, selectedTab }: DashboardTest) => {
   const [searchQuery, setSearchQuery] = useState("");
   const posts = SAMPLE_POSTS;
 
+  const isLoggedIn = false;
+
   const filteredListings = listings.filter((l) =>
     l.listing.location?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="bg-white dark:bg-[#242424] rounded-lg p-3 shadow-lg">
-      <TopNav onSearch={setSearchQuery} onClear={() => setSearchQuery("")} />
-
+    <div className="bg-white dark:bg-[#242424] rounded-lg px-3 shadow-lg min-h-[95vh]">
+      <TopNav
+        onSearch={setSearchQuery}
+        onClear={() => setSearchQuery("")}
+        isLoggedIn={isLoggedIn}
+      />
       <div>
         {selectedTab === "Home" && (
           <div>
             <div className="flex items-center justify-end mr-4">
               <ViewToggle onViewChange={setActiveView} />
             </div>
-            <div className="flex flex-col items-center justify-center text-2xl gap-2 m-3">
+            <div className="flex flex-col items-center justify-center text-2xl gap-2 ">
               {activeView === "listings" ? (
                 <ListingsGrid listings={filteredListings} />
               ) : (

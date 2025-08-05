@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "./auth-context";
 import { Loader2 } from "lucide-react";
+import { useAuthDialog } from "./auth-dialog-context";
 
 interface AuthDialogProps {
   open: boolean;
@@ -22,12 +23,16 @@ interface AuthDialogProps {
   defaultMode?: "signin" | "signup";
 }
 
-export function AuthDialog({
-  open,
-  onOpenChange,
-  defaultMode = "signin",
-}: AuthDialogProps) {
-  const [mode, setMode] = useState<"signin" | "signup">(defaultMode);
+// {
+//   open,
+//   onOpenChange,
+//   defaultMode = "signin",
+// }: AuthDialogProps
+
+export function AuthDialog() {
+  const { open, mode, closeDialog } = useAuthDialog();
+
+  // const [mode, setMode] = useState<"signin" | "signup">(defaultMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,19 +55,21 @@ export function AuthDialog({
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-      onOpenChange(false);
+      closeDialog();
+      // onOpenChange(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Authentication failed");
     }
   };
 
   const switchMode = () => {
-    setMode(mode === "signin" ? "signup" : "signin");
+    // setMode(mode === "signin" ? "signup" : "signin");
     setError("");
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    // <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={closeDialog}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>

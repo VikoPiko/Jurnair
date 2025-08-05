@@ -1,0 +1,23 @@
+{
+  "name": "peero",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/VikoPiko/Jurnair#readme",
+  "bugs": {
+    "url": "https://github.com/VikoPiko/Jurnair/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VikoPiko/Jurnair.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start:all": "concurrently \"cd frontend && npm run dev\" \"cd backends/nestjs && npm run start:dev\""
+  },
+  "dependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

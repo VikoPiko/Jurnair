@@ -31,7 +31,7 @@ export function ViewToggle({ onViewChange }: ViewToggleProps) {
           <button
             onClick={() => handleViewChange("listings")}
             className={cn(
-              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all",
+              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-300",
               activeView === "listings"
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:bg-muted"
@@ -48,7 +48,7 @@ export function ViewToggle({ onViewChange }: ViewToggleProps) {
           <button
             onClick={() => handleViewChange("posts")}
             className={cn(
-              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all",
+              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-300",
               activeView === "posts"
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:bg-muted"

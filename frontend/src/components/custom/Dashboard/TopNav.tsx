@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { SearchBar } from "./SearchBar";
 import { Button } from "@/components/ui/button";
@@ -7,18 +6,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CircleQuestionMarkIcon } from "lucide-react";
+import { CircleQuestionMarkIcon, Crown, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "../mode-toggle";
 import { Icon } from "../Icon";
+import { useAuthDialog } from "../Auth/auth-dialog-context";
+import { useAuth } from "../Auth/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const TopNav = ({
   onSearch,
   onClear,
+  isLoggedIn,
 }: {
   onSearch: (query: string) => void;
   onClear: () => void;
+  isLoggedIn: boolean;
 }) => {
+  const { openDialog } = useAuthDialog();
+  const { user, isAuthenticated, signOut } = useAuth();
   return (
     <div className="pb-10">
       <div className="flex justify-between items-center p-5">
@@ -30,18 +41,39 @@ const TopNav = ({
         <SearchBar onLocationChange={onSearch} onClear={onClear} />
         <div className="flex items-center gap-x-4">
           <ModeToggle />
-          <Button
-            variant="outline"
-            className="hover:bg-stone-200 transition-all duration-300"
-          >
-            Become a host
-          </Button>
-          <Button>Sign In</Button>
+          {user?.role === "HOST" ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="bg-amber-50 border-amber-200 text-amber-700"
+                >
+                  <Crown className="w-4 h-4 mr-1" />
+                  Host
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Host Dashboard</DropdownMenuItem>
+                <DropdownMenuItem>Manage Listings</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="outline">Become a host</Button>
+          )}
+          {!isAuthenticated && (
+            <Button onClick={() => openDialog("signin")}>Sign In</Button>
+          )}
           <Popover>
             <PopoverTrigger asChild>
-              <div className="flex items-center justify-center font-bold text-2xl text-white w-[40px] h-[40px] rounded-full select-none bg-blue-500 shadow-md hover:bg-blue-600 transition-all duration-100">
-                V
-              </div>
+              {isAuthenticated ? (
+                <div className="flex items-center justify-center font-bold text-2xl text-white w-[40px] h-[40px] rounded-full select-none bg-blue-500 shadow-md hover:bg-blue-600 transition-all duration-100">
+                  {user?.firstName && user?.firstName[0]}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center bg-gray-200 w-[40px] h-[40px] rounded-full border border-gray-400 shadow-md hover:bg-gray-300">
+                  <User />
+                </div>
+              )}
             </PopoverTrigger>
             <PopoverContent className="w-48 mr-6 mt-3 border border-stone-400 flex">
               <div className="flex flex-col items-center gap-y-1">
@@ -75,8 +107,15 @@ const TopNav = ({
                 <Button
                   variant={"outline"}
                   className="justify-start w-full hover:bg-stone-200 transition-all"
+                  onClick={() =>
+                    isAuthenticated ? signOut() : openDialog("signin")
+                  }
                 >
-                  <h1>Log in or Sign up.</h1>
+                  {isAuthenticated ? (
+                    <h1>Log Out</h1>
+                  ) : (
+                    <h1>Log in or Sign up.</h1>
+                  )}
                 </Button>
               </div>
             </PopoverContent>

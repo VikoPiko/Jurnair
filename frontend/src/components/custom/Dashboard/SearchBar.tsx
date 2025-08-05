@@ -326,7 +326,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
 
         <Button
           size="icon"
-          className="ml-2 h-10 w-10 shrink-0 rounded-full"
+          className="ml-2 h-10 w-10 shrink-0 rounded-full shadow-md"
           onClick={() => {
             if (location.trim() !== "") {
               setRecentSearches((prev) => {
@@ -346,7 +346,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
         <Button
           variant={"outline"}
           //   className="ml-3 h-8 w-15 shrink-0 rounded-full"
-          className="ml-3 shrink-0 rounded-full"
+          className="ml-3 shrink-0 rounded-full shadow-md"
           onClick={() => {
             setLocation("");
             setActiveTab("location");
@@ -358,6 +358,7 @@ export function SearchBar({ onLocationChange, onClear }: SearchBarProps) {
             });
             setDateRange({ from: undefined, to: undefined });
             setIsOpen(false);
+            onClear();
           }}
         >
           <h1>Clear</h1>

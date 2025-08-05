@@ -50,7 +50,7 @@ const PageContent = ({ listings }: { listings: any[] }) => {
           }
         }}
       />
-      <div className="ml-[205px] p-4">
+      <div className="ml-[205px] p-3">
         <Dashboard listings={listings} selectedTab={selectedTab} />
       </div>
     </div>
