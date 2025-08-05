@@ -1,6 +1,7 @@
 import { ListingDetailProps } from "@/lib/utils";
 import { ListCard } from "./ListCard";
 import { ArrowRight } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 // import { ListCard } from "@/app/test/page";
 
 interface ListingsGridProps {
@@ -23,7 +24,7 @@ export function ListingsGrid({ listings }: ListingsGridProps) {
         </h1>
         <ArrowRight className="w-4 h-4 translate-y-[1px]" />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 mb-3">
         {listings.map((listing) => (
           <ListCard key={listing.listing.id} {...listing} />
         ))}

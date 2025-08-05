@@ -48,7 +48,8 @@ const Dashboard = ({ listings, selectedTab }: DashboardTest) => {
           </div>
         )}
         {selectedTab === "My Journal" && (
-          <div className="flex items-center justify-center mb-2 h-[75vh]">
+          // <div className="flex items-center justify-center mb-2 h-[75vh]">
+          <div className="flex items-center justify-center mb-2">
             <Journal />
           </div>
         )}

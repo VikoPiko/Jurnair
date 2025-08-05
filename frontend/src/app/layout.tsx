@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/custom/theme-provider";
 import { AuthProvider } from "@/components/custom/Auth/auth-context";
 import { AuthDialogProvider } from "@/components/custom/Auth/auth-dialog-context";
 import { AuthDialog } from "@/components/custom/Auth/auth-dialog";
+import { JournalProvider } from "@/components/custom/Dashboard/Journal/JournalContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,7 @@ export default function RootLayout({
           <AuthProvider>
             <AuthDialogProvider>
               <AuthDialog />
-              {children}
+              <JournalProvider>{children}</JournalProvider>
             </AuthDialogProvider>
           </AuthProvider>
         </ThemeProvider>

@@ -22,7 +22,7 @@ export const ListCard = ({ listing }: ListingDetailProps) => {
       className="group cursor-pointer"
       onClick={() => router.push(`/listing/${listing.id}`)}
     >
-      <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-2">
+      <div className="relative w-full aspect-[20/19] rounded-2xl overflow-hidden mb-2">
         {listing.images && (
           <>
             <Image

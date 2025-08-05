@@ -54,6 +54,7 @@ const TopNav = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>Host Dashboard</DropdownMenuItem>
+                <Separator />
                 <DropdownMenuItem>Manage Listings</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
