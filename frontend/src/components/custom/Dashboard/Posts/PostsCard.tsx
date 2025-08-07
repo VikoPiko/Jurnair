@@ -32,6 +32,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAuth } from "../../Auth/auth-context";
+
+type CommentType = {
+  content: string;
+  author: string;
+};
+
+const sample_comments = [
+  { content: "Wow great views!", author: "viko@gmail.com" },
+  { content: "OHAAA!", author: "nisos@gmail.com" },
+  { content: "it's honestly meh", author: "hater@gmail.com" },
+];
 
 export function PostCard({ post }: { post: PostsType }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -39,7 +51,9 @@ export function PostCard({ post }: { post: PostsType }) {
   const [likes, setLikes] = useState(post.likes);
   const [isCommenting, setIsCommenting] = useState(false);
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState<string[]>([]);
+  const [comments, setComments] = useState<CommentType[]>(sample_comments);
+
+  const { user } = useAuth();
 
   const MAX_LENGTH = 150;
   const safeDescription = post.description ?? "";
@@ -53,10 +67,16 @@ export function PostCard({ post }: { post: PostsType }) {
     isLiked ? setLikes(likes - 1) : setLikes(likes + 1);
   };
 
-  const handleComment = (comment: string) => {
+  const handleComment = () => {
     if (comment.trim() === "") return;
+    if (!user) return;
 
-    setComments((prev) => [...prev, comment]);
+    const newComment: CommentType = {
+      content: comment,
+      author: user.email,
+    };
+
+    setComments((prev) => [...prev, newComment]);
     setComment("");
     setIsCommenting(false);
   };
@@ -220,8 +240,8 @@ export function PostCard({ post }: { post: PostsType }) {
           {comments &&
             comments.map((comment, idx) => (
               <p key={idx} className="text-sm">
-                <span className="font-semibold">{post.author_Id} </span>
-                {comment}
+                <span className="font-semibold">{comment.author} </span>
+                {comment.content}
               </p>
             ))}
         </div>
@@ -235,7 +255,7 @@ export function PostCard({ post }: { post: PostsType }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  handleComment(comment);
+                  handleComment();
                 }
               }}
             />
@@ -243,7 +263,7 @@ export function PostCard({ post }: { post: PostsType }) {
               size="icon"
               variant={"outline"}
               className="w-9 h-9 hover:bg-stone-200"
-              onClick={() => handleComment(comment)}
+              onClick={() => handleComment()}
             >
               <Send className="w-5 h-5" />
             </Button>

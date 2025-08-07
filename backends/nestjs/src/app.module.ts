@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ListingsService } from './listings/listings.service';
 import { ListingsController } from './listings/listings.controller';
 import { ListingsModule } from './listings/listings.module';
+import { JournalModule } from './journal/journal.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ListingsModule } from './listings/listings.module';
     UserModule,
     PrismaModule,
     ListingsModule,
+    JournalModule,
   ],
   providers: [ListingsService],
   controllers: [ListingsController],

@@ -1,11 +1,11 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export type JournalType = {
-  entryId: string;
+  id: string;
   title: string;
   location: string;
-  entryContent: string;
+  description?: string;
   date: string;
   theme: string;
   photos: string[];
@@ -21,10 +21,10 @@ const JournalContext = createContext<JournalContextType | undefined>(undefined);
 
 const initialEntries: JournalType[] = [
   {
-    entryId: "1a2b3c4d",
+    id: "1a2b3c4d",
     title: "Sunset at Cappadocia",
     location: "Göreme, Turkey",
-    entryContent:
+    description:
       "Today was magical. We woke up at dawn to catch the hot air balloons rise over the rocky landscape. The view was unlike anything I’ve ever seen — surreal, peaceful, and vibrant. I felt like I was floating even from the ground.",
     date: "2025-08-01",
     theme: "Travel",
@@ -41,10 +41,10 @@ const initialEntries: JournalType[] = [
     visibility: "public",
   },
   {
-    entryId: "5e6f7g8h",
+    id: "5e6f7g8h",
     title: "A Quiet Day at Home",
     location: "Sofia, Bulgaria",
-    entryContent:
+    description:
       "Spent the day indoors reflecting and journaling. Brewed some coffee, lit a candle, and read a few chapters of a new book. Sometimes the most ordinary days bring the most clarity.",
     date: "2025-07-28",
     theme: "Personal",
@@ -69,7 +69,19 @@ export const JournalProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [entries, setEntries] = useState<JournalType[]>(initialEntries);
+  // const [entries, setEntries] = useState<JournalType[]>(initialEntries);
+  const [entries, setEntries] = useState<JournalType[]>([]);
+
+  useEffect(() => {
+    const getEntries = async () => {
+      const data = await fetch("http://localhost:3001/journal/all");
+      if (!data) return;
+      const entries = await data.json();
+      console.log(entries);
+      setEntries(entries);
+    };
+    getEntries();
+  }, [entries]);
 
   const addEntry = (entry: JournalType) => {
     setEntries((prev) => [entry, ...prev]);

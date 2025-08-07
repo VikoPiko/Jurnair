@@ -68,7 +68,8 @@ const TopNav = ({
             <PopoverTrigger asChild>
               {isAuthenticated ? (
                 <div className="flex items-center justify-center font-bold text-2xl text-white w-[40px] h-[40px] rounded-full select-none bg-blue-500 shadow-md hover:bg-blue-600 transition-all duration-100">
-                  {user?.firstName && user?.firstName[0]}
+                  {/* {user?.firstName && user?.firstName[0]} */}
+                  {user?.email && user?.email[0].toUpperCase()}
                 </div>
               ) : (
                 <div className="flex items-center justify-center bg-gray-200 w-[40px] h-[40px] rounded-full border border-gray-400 shadow-md hover:bg-gray-300">

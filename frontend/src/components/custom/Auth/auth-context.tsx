@@ -22,7 +22,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<string | void>;
   signUp: (
     email: string,
     password: string,
@@ -55,18 +55,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      const mockData: User = {
-        id: "123",
-        firstName: "Viko",
-        lastName: "Piko",
-        email: email,
-        avatarUrl: "",
-        role: "HOST",
-      };
-      setUser(mockData);
-      sessionStorage.setItem("user", JSON.stringify(mockData));
+      if (!res.ok) {
+        return "Error while logging in...";
+      }
+
+      const { access_token } = await res.json();
+      sessionStorage.setItem("token", access_token);
+
+      const userRes = await fetch("http://localhost:3001/user/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (!userRes.ok) {
+        throw new Error("Error fetching user info");
+      }
+
+      const user = await userRes.json();
+      setUser(user);
+      sessionStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
       throw new Error("Sign in failed...");
     } finally {
@@ -86,19 +103,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock user data
-      const mockUser: User = {
-        id: "1",
-        firstName: "Viko",
-        lastName: "Piko",
-        email: email,
-        avatarUrl: "/placeholder.svg?height=32&width=32",
-        role: "USER",
-      };
+      // const mockUser: User = {
+      //   id: "1",
+      //   firstName: "Viko",
+      //   lastName: "Piko",
+      //   email: email,
+      //   avatarUrl: "/placeholder.svg?height=32&width=32",
+      //   role: "USER",
+      // };
 
-      setUser(mockUser);
+      const res = await fetch("http://localhost:3001/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        throw new Error("Error while registering....");
+      }
+      const { access_token } = await res.json();
+      sessionStorage.setItem("token", access_token);
+
+      const userRes = await fetch("http://localhost:3001/user/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      if (!userRes.ok) {
+        throw new Error("Error with user/me Request");
+      }
+      const user = await userRes.json();
+      setUser(user);
+      sessionStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
       throw new Error("Sign up failed");
     } finally {

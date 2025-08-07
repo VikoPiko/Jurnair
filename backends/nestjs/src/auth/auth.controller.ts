@@ -7,14 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('signup')
-  signup(@Body() dto: AuthDto) {
-    return this.authService.signup(dto);
+  @Post('register')
+  register(@Body() dto: AuthDto) {
+    return this.authService.register(dto);
   }
 
   @HttpCode(200)
-  @Post('signin')
-  signin(@Body() dto: AuthDto) {
-    return this.authService.signin(dto);
+  @Post('login')
+  login(@Body() dto: AuthDto) {
+    return this.authService.login(dto);
   }
 }
